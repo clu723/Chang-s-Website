@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Portfolio" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/fa62c117c7.js" crossorigin="anonymous"></script>
+  <!-- BEGIN PART 1 -->
+  <link rel="stylesheet" type="text/css" href="C:\Users\User\cubstart\hw1\styles.css">
+  <title>Chang Lu</title>
+  <!-- END PART 1 -->
+</head>
+
+<body class="light" id="top">
+  <header class="header center">
+    <!-- BEGIN PART 2 -->
+    <h3>
+      <a class="header" href="file:///C:/Users/User/cubstart/hw1/index.html">C.L.</a>
+    </h3>
+    <!-- END PART 2 -->
+    <nav class="nav center">
+      <ul class="nav__list center">
+        <li class="nav__list-item">
+          <a class="link link--nav" href="#projects">Projects</a>
+        </li>
+        <li class="nav__list-item">
+          <a class="link link--nav" href="#skills">Skills</a>
+        </li>
+        <li class="nav__list-item">
+          <a class="link link--nav" href="#contact">Contact</a>
+        </li>
+      </ul>
+
+      <!-- BEGIN PART 5 -->
+
+      <button type="button" aria-label="toggle navigation" class="btn btn--icon nav__hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- 
+        5.1: What does this button tag correspond to on the site? 
+      
+      This button corresponds to the sun/moon icon on the top right of the site that changes the
+      theme of the website to light and dark theme.
+      Note: I switched the order of the two buttons.
+      -->
+
+
+      <button type="button" aria-label="toggle theme" class="btn btn--icon">
+        <i id="btn-theme" class="fas fa-moon"></i>
+      </button>
+
+      <!-- 
+        5.2: Try Ctrl-F in styles.css and look the class 'nav__hamburger'. You'll notice that it
+        appears in 2 places. Why is one of the rules 'display: none' on one instance? How do you
+        make it so that this button appears on screen? 
+        Hint: remember what @media (max-width: 600px) means.
+        
+        One of the rules is "display: none" on one instance because it only applies when the screen
+        width of the browser is <= 600px, so the button disappears when the user's browser is <= 600px. 
+        You make it so this button appears on screen when the screen width is <=600px by changing it to
+        "display: flex."
+       -->
+
+      <!-- END PART 5 -->
+    </nav>
+  </header>
+
+  <main>
+    <div class="about center">
+      <!-- BEGIN PART 6 -->
+      <h1>Hi, I'm <span class="about__name">Chang!</span></h1>
+      <h2 class="about__role">University of California, Berkeley<br/>Computer Science B.A. Major</h2>
+      <p class="about__desc">Hi, welcome to my humble website. 
+        I'm currently learning how to code in Java, HTML, CSS, and JavaScript!
+      </p>
+      <!-- END PART 6 -->
+      <div class="about__contact center">
+        <a href="https://docs.google.com/document/d/1f0VW7jbNPH58M9sUUqjgJX7r35uoqpbNfiTv3CdxbYA/edit#" target="_blank">
+          <span class="btn btn--outline">Resume</span>
+        </a>
+
+        <a href="https://github.com/clu934" target="_blank" aria-label="github" class="link link--icon">
+          <i aria-hidden="true" class="fab fa-github"></i>
+        </a>
+
+        <a href="https://www.linkedin.com/in/chang-lu-9b7a47214/" target="_blank" aria-label="linkedin" class="link link--icon">
+          <i aria-hidden="true" class="fab fa-linkedin"></i>
+        </a>
+      </div>
+    </div>
+    <section id="projects" class="section projects">
+      <h2 class="section__title">Projects</h2>
+      <div class="projects__grid">
+        <!-- BEGIN PART 8 -->
+        <div class="project">
+          <h3>ROBLOX Game: Kill the Zombies</h3>
+          <p class="project__description">
+            I made a ROBLOX game that's really bad. WOOO!
+          </p>
+          <ul class="project__stack">
+            <li class="project__stack-item">Lua</li>
+          </ul>
+
+          <a href="https://github.com" aria-label="source code" class="link link--icon">
+            <i aria-hidden="true" class="fab fa-github"></i>
+          </a>
+          <a href="https://example.com" aria-label="live preview" class="link link--icon">
+            <i aria-hidden="true" class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+        <div class="project">
+          <h3>Connect Four</h3>
+          <p class="project__description">
+            I recreated the classic Connect Four game in Python that runs in the terminal!
+          </p>
+          <ul class="project__stack">
+            <li class="project__stack-item">Python</li>
+          </ul>
+
+          <a href="https://github.com" aria-label="source code" class="link link--icon">
+            <i aria-hidden="true" class="fab fa-github"></i>
+          </a>
+          <a href="https://example.com" aria-label="live preview" class="link link--icon">
+            <i aria-hidden="true" class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+        <div class="project">
+          <h3>Hog</h3>
+          <p class="project__description">
+            CS61A project about rolling dice.
+          </p>
+          <ul class="project__stack">
+            <li class="project__stack-item">Python</li>
+          </ul>
+
+          <a href="https://github.com" aria-label="source code" class="link link--icon">
+            <i aria-hidden="true" class="fab fa-github"></i>
+          </a>
+          <a href="https://example.com" aria-label="live preview" class="link link--icon">
+            <i aria-hidden="true" class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+        <div class="project">
+          <h3>Cats</h3>
+          <p class="project__description">
+            I made a typeracer game in Python!
+          </p>
+          <ul class="project__stack">
+            <li class="project__stack-item">Python</li>
+          </ul>
+
+          <a href="https://github.com" aria-label="source code" class="link link--icon">
+            <i aria-hidden="true" class="fab fa-github"></i>
+          </a>
+          <a href="https://example.com" aria-label="live preview" class="link link--icon">
+            <i aria-hidden="true" class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+        <div class="project">
+          <h3>Ants</h3>
+          <p class="project__description">
+            I made a version of the popular game "Plants vs Zombies" in Python!
+          </p>
+          <ul class="project__stack">
+            <li class="project__stack-item">Python</li>
+          </ul>
+
+          <a href="https://github.com" aria-label="source code" class="link link--icon">
+            <i aria-hidden="true" class="fab fa-github"></i>
+          </a>
+          <a href="https://example.com" aria-label="live preview" class="link link--icon">
+            <i aria-hidden="true" class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+        <div class="project">
+          <h3>Scheme</h3>
+          <p class="project__description">
+            I made a scheme interpreter using Python!
+          </p>
+          <ul class="project__stack">
+            <li class="project__stack-item">Python</li>
+          </ul>
+
+          <a href="https://github.com" aria-label="source code" class="link link--icon">
+            <i aria-hidden="true" class="fab fa-github"></i>
+          </a>
+          <a href="https://example.com" aria-label="live preview" class="link link--icon">
+            <i aria-hidden="true" class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+        <div class="project">
+          <h3>Blocks</h3>
+          <p class="project__description">
+            I made a blocks game using Java!
+          </p>
+          <ul class="project__stack">
+            <li class="project__stack-item">Java</li>
+          </ul>
+
+          <a href="https://github.com" aria-label="source code" class="link link--icon">
+            <i aria-hidden="true" class="fab fa-github"></i>
+          </a>
+          <a href="https://example.com" aria-label="live preview" class="link link--icon">
+            <i aria-hidden="true" class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+        <!-- END PART 8 -->
+      </div>
+    </section>
+
+
+    <section class="section skills" id="skills">
+      <!-- BEGIN PART 10 -->
+      <h2 class="section__title">Skills</h2>
+      <ul class="skills__list">
+        <li class="skills__list-item btn btn--plain">Python</li>
+        <li class="skills__list-item btn btn--plain">Java</li>
+        <li class="skills__list-item btn btn--plain">HTML</li>
+        <li class="skills__list-item btn btn--plain">CSS</li>
+      </ul>
+      <!-- END PART 10 -->
+    </section>
+    <section class="section contact center" id="contact">
+      <h2 class="section__title">Contact</h2>
+      <a href="mailto: clu723@berkeley.edu">
+        <span class="btn btn--outline">Email me here!</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <!-- BEGIN PART 12 -->
+    <a class="link footer__link">
+      Credits to CubStart Web Development DeCal
+    </a>
+    <!-- END PART 12 -->
+  </footer>
+
+
+  <div class="scroll-container">
+    <div class="scroll-top">
+      <a aria-label="Scroll up" href="#top">
+        <i aria-hidden="true" class="fas fa-arrow-up"></i>
+      </a>
+    </div>
+  </div>
+  <script src="./script.js"></script>
+</body>
+
+</html>
