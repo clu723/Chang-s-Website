@@ -9,13 +9,26 @@
     <div class="chat-container">
         <div class="messages" id="messages">
             <div class="message bot">Well well, look who's here... How can I help you?</div>
-            <div class="message user">Take me to the about page!</div>
         </div>
         <div class="input-container">
-            <button class="microphone" id="mic-button">
+            <button class="microphone" id="mic-button"">
                 <span class="microphone-icon">🎤</span>
             </button>
+            <div class="input-container">
+                <input
+                    type="text"
+                    id="chat-input"
+                    class="chat-input"
+                    placeholder="Click the microphone to start talking!"
+                    autocomplete="off"
+                    disabled
+                />
+                <button class="send-btn" id="send-btn" title="Send">
+                    ➤
+                </button>
+                </div>
         </div>
     </div>
+    <script src="chatbot.js"></script>
 </body>
 </html>
