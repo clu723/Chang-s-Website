@@ -69,15 +69,16 @@ header {
   align-items: center;
 }
 
-.microphone:active {
-  background-color: #e55b4e;
+.microphone.active {
+  background-color: #ffffff;
+  box-shadow: 0 0 12px 3px #ffffffff;
 }
 
 .microphone-icon {
   font-size: 1.5rem;
   color: white;
 }
-    
+
 .input-container {
   display: flex;
   align-items: center;
@@ -123,4 +124,35 @@ header {
 .send-btn:hover,
 .send-btn:focus {
   background: #e55b4e;
+}
+
+.clear-btn {
+  background: transparent;
+  border: 2px solid #888;
+  color: #ffffff;
+  padding: 0.4em 1.2em;
+  border-radius: 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: 
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+  outline: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.clear-btn:hover,
+.clear-btn:focus {
+  background: #f2f2f2;
+  color: #111;
+  border-color: #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.clear-btn:active {
+  background: #e2e2e2;
+  color: #000;
+  border-color: #111;
 }

@@ -21,11 +21,11 @@ const conversationHistory = [
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 
-app.post('/chatbot', async (req, res) => {
+app.post('/api/chatbot', async (req, res) => {
   const userPrompt = req.body.prompt;
   conversationHistory.push({ role: "user", parts: [{ text: userPrompt }] });
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-lite-preview-06-17",
+    model: "gemini-2.5-flash-lite",
     contents: conversationHistory,
     config: {
       thinkingConfig: {
@@ -40,4 +40,4 @@ app.post('/chatbot', async (req, res) => {
   res.json(response.text);
 });
 
-app.listen(port, () => console.log('Server started on http://localhost:3000'));
+app.listen(port, () => console.log(`Server started on http://localhost:${port}`));
