@@ -14,6 +14,10 @@ recognition.interimResults = true;
 let micActive = false;
 
 micButton.addEventListener('click', () => {
+    micToggle();
+});
+
+const micToggle = () => {
     if (micActive) {
         recognition.stop();
         micButton.classList.remove('active');
@@ -21,8 +25,9 @@ micButton.addEventListener('click', () => {
         recognition.start();
     }
     micActive = !micActive;
-});
+}
 
+// 
 recognition.onresult = function (event) {
     for (let i = event.resultIndex; i < event.results.length; i++) {
         if (event.results[i].isFinal) {
@@ -34,17 +39,31 @@ recognition.onresult = function (event) {
 sendButton.addEventListener('click', () => {
     const userMessage = chatInput.value.trim();
     if (userMessage) {
+        micToggle();
         const userMsgDiv = document.createElement('div');
         userMsgDiv.className = 'message user';
         userMsgDiv.textContent = userMessage;
         messagesDiv.appendChild(userMsgDiv);
         chatInput.value = '';
 
-        // Simulate bot response
-        const botResponse = `You said: ${userMessage}`;
-        const botMsgDiv = document.createElement('div');
-        botMsgDiv.className = 'message bot';
-        botMsgDiv.textContent = botResponse;
-        messagesDiv.appendChild(botMsgDiv);
+        // bot response
+        sendPromptToGemini(userMessage).then(response => {
+            console.log(response);
+            const botResponse = response;
+            const botMsgDiv = document.createElement('div');
+            botMsgDiv.className = 'message bot';
+            botMsgDiv.textContent = botResponse;
+            messagesDiv.appendChild(botMsgDiv);
+        });
     }
 });
+
+async function sendPromptToGemini(prompt) {
+  const res = await fetch('http://localhost:3000/chatbot', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt }),
+  });
+  const data = await res.json();
+  return data;
+};

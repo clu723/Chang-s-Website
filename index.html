@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <title>Chang's Personal Website</title>
-    <link rel="stylesheet" href="/styles/home.css" />
+    <link rel="stylesheet" href="styles/home.css" />
 </head>
 <body>
     <div class="chat-container">
         <div class="messages" id="messages">
-            <div class="message bot">Well well, look who's here... How can I help you?</div>
         </div>
         <div class="input-container">
             <button class="microphone" id="mic-button"">
@@ -21,6 +20,7 @@
                     class="chat-input"
                     placeholder="Click the microphone to start talking!"
                     autocomplete="off"
+                    style="cursor: not-allowed;"
                     disabled
                 />
                 <button class="send-btn" id="send-btn" title="Send">
@@ -29,6 +29,6 @@
                 </div>
         </div>
     </div>
-    <script src="chatbot.js"></script>
+    <script src="javascript/chatbot.js"></script>
 </body>
 </html>
