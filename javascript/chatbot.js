@@ -13,6 +13,17 @@ recognition.interimResults = true;
 
 let micActive = false;
 
+document.addEventListener('DOMContentLoaded', function() {
+    sendPromptToGemini("Welcome the user.").then(response => {
+        console.log(response);
+        const botResponse = response;
+        const botMsgDiv = document.createElement('div');
+        botMsgDiv.className = 'message bot';
+        botMsgDiv.textContent = botResponse;
+        messagesDiv.appendChild(botMsgDiv);
+    });
+});
+
 micButton.addEventListener('click', () => {
     micToggle();
 });
