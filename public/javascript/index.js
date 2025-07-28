@@ -5,29 +5,38 @@ const sendButton = document.getElementById('send-btn');
 const clearButton = document.getElementById('clear-btn');
 
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-if (!window.SpeechRecognition) {
-    alert('Sorry, your browser does not support speech recognition.');
-}
 const recognition = new window.SpeechRecognition;
 recognition.continuous = true;
 recognition.interimResults = true;
-
 const synth = window.speechSynthesis;
-
 let micActive = false;
 
 // On user load, Gemini introduces itself
 document.addEventListener('DOMContentLoaded', function() {
-    sendPromptToGemini("Welcome the user.").then(response => {
-        const botResponse = response;
-        const botMsgDiv = document.createElement('div');
-        botMsgDiv.className = 'message bot';
-        botMsgDiv.textContent = botResponse;
-        messagesDiv.appendChild(botMsgDiv);
-        speak(botResponse);
+    sendPromptToGemini("Welcome the user to Chang's website.").then(response => {
+        const msg = response.replace(/navigate:[^\s]+/i, '').trim();
+        createMsg(msg, 'bot');
+        speak(msg);
+        navigatePage(response);
     });
 });
 
+// type is either 'user' or 'bot' message
+const createMsg = (msg, type) => {
+    if (type === "bot") {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message bot';
+        msgDiv.textContent = msg;
+        messagesDiv.appendChild(msgDiv);
+    } else if (type === "user") {
+        const userMsgDiv = document.createElement('div');
+        userMsgDiv.className = 'message user';
+        userMsgDiv.textContent = msg;
+        messagesDiv.appendChild(userMsgDiv);
+    }
+}
+
+// Configure TTS and speak the words
 const speak = (words) => {
     window.speechSynthesis.cancel();
     const spokenWords = new SpeechSynthesisUtterance(words);
@@ -44,6 +53,7 @@ micButton.addEventListener('click', () => {
     micToggle();
 });
 
+// Adding 'active' class is for the glow effect when mic is active/inactive
 const micToggle = () => {
     if (micActive) {
         recognition.stop();
@@ -55,7 +65,7 @@ const micToggle = () => {
     micButton.classList.toggle('active', micActive);
 }
 
-// Append to chatInput whenver user takes a puase when speaking
+// Append to chatInput whenver user takes a pause when speaking
 recognition.onresult = function (event) {
     for (let i = event.resultIndex; i < event.results.length; i++) {
         if (event.results[i].isFinal) {
@@ -73,27 +83,21 @@ sendButton.addEventListener('click', () => {
     const userMessage = chatInput.value.trim();
     if (userMessage) {
         micToggle();
-        const userMsgDiv = document.createElement('div');
-        userMsgDiv.className = 'message user';
-        userMsgDiv.textContent = userMessage;
-        messagesDiv.appendChild(userMsgDiv);
+        createMsg(userMessage, 'user');
         chatInput.value = '';
 
         // bot response
         sendPromptToGemini(userMessage).then(response => {
-            console.log(response);
-            const botResponse = response;
-            const botMsgDiv = document.createElement('div');
-            botMsgDiv.className = 'message bot';
-            botMsgDiv.textContent = botResponse;
-            messagesDiv.appendChild(botMsgDiv);
-            speak(botResponse);
+            const msg = response.replace(/navigate:[^\s]+/i, '').trim();
+            createMsg(msg, 'bot');
+            speak(msg);
+            navigatePage(response);
         });
     }
 });
 
 async function sendPromptToGemini(prompt) {
-  const res = await fetch('http://localhost:3000/api/chatbot', {
+  const res = await fetch('/api/chatbot', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prompt }),
@@ -101,3 +105,18 @@ async function sendPromptToGemini(prompt) {
   const data = await res.json();
   return data;
 };
+
+const allowedPages = ['about.html', 'skills.html', 'projects.html'];
+
+function navigatePage(reply) {
+  const navMatch = reply.match(/navigate:([^\s]+)/i);
+
+  if (navMatch) {
+    const targetPage = navMatch[1];
+    if (allowedPages.includes(targetPage)) {
+        setTimeout(() => {
+            window.location.href = targetPage;
+        }, 2000);
+    }
+  }
+}

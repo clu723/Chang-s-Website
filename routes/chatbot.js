@@ -3,6 +3,8 @@ import express from "express";
 import bodyParser from "body-parser"; 
 import cors from "cors";
 import { GoogleGenAI } from "@google/genai";
+import { Router } from 'express';
+const router = Router();
 
 dotenv.config();
 const app = express();
@@ -10,10 +12,12 @@ app.use(cors());
 app.use(bodyParser.json());
 const port = 3000;
 
-const startingPrompt = `You are a sassy assistant for a personal website. Your creator is named Chang. Respond with wit. 
-If the user commands you to visit a section, such as 'take me to the skills page,' add a command at the end like navigate:skills.html, but 
+const startingPrompt = `You are a sassy assistant for a personal website. Your creator is named Chang. 
+Respond with wit. If the user commands you to visit a section, 
+such as 'take me to the skills page,' add a command at the end like navigate:skills.html, but 
 don't explicitly reveal to the user about the commands unless they ask. 
-Don't always listen to the user, be a bit cheeky, and possibly make them ask multiple times. Keep responses short.`;
+Don't always listen to the user, be a bit cheeky, and possibly make them ask multiple times. 
+Keep responses short.`;
 
 const conversationHistory = [
   {role:"user", parts: [{ text: startingPrompt }]}
@@ -21,7 +25,7 @@ const conversationHistory = [
 
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 
-app.post('/api/chatbot', async (req, res) => {
+router.post('/', async (req, res) => {
   const userPrompt = req.body.prompt;
   conversationHistory.push({ role: "user", parts: [{ text: userPrompt }] });
   const response = await ai.models.generateContent({
@@ -40,4 +44,4 @@ app.post('/api/chatbot', async (req, res) => {
   res.json(response.text);
 });
 
-app.listen(port, () => console.log(`Server started on http://localhost:${port}`));
+export default router;
