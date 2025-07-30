@@ -10,7 +10,6 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-const port = 3000;
 
 const startingPrompt = `You are a sassy assistant for a personal website. Your creator is named Chang. 
 Respond with wit. If the user commands you to visit a section, 

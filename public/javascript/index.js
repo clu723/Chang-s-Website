@@ -21,19 +21,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// type is either 'user' or 'bot' message
-const createMsg = (msg, type) => {
-    if (type === "bot") {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'message bot';
-        msgDiv.textContent = msg;
-        messagesDiv.appendChild(msgDiv);
-    } else if (type === "user") {
-        const userMsgDiv = document.createElement('div');
-        userMsgDiv.className = 'message user';
-        userMsgDiv.textContent = msg;
-        messagesDiv.appendChild(userMsgDiv);
-    }
+const history = [];
+
+// role is either 'user' or 'bot' message
+const createMsg = (msg, role) => {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message ' + (role === 'user' ? 'user' : 'bot');
+    msgDiv.textContent = msg;
+    messagesDiv.appendChild(msgDiv);
+    history.push({ role, msg });
+    localStorage.setItem('chatbot-history', JSON.stringify(history));
 }
 
 // Configure TTS and speak the words
