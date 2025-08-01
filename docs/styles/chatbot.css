@@ -156,3 +156,47 @@ header {
   color: #000;
   border-color: #111;
 }
+
+@media (max-width: 600px) {
+  .chat-container {
+    padding: 0.3rem;
+  }
+
+  .messages {
+    font-size: 1rem;
+    scroll-behavior: smooth;
+  }
+
+  .message {
+    max-width: 95%;
+    font-size: 0.98rem;
+    padding: 0.55rem 0.8rem;
+  }
+
+  .input-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.3rem;
+    width: 100%;
+  }
+
+  .microphone,
+  .send-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+  }
+
+  .chat-input {
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+  }
+
+  .clear-btn {
+    min-width: 0;
+    margin-top: 0.3rem;
+    font-size: 1rem;
+    padding: 0.4rem 0.7rem;
+  }
+}

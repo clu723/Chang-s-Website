@@ -68,3 +68,23 @@
   border: 1px solid #ff6f61;
   outline: none;
 }
+
+@media (max-width: 600px) {
+  .help-content {
+    width: 94vw;
+    max-width: 98vw;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1rem;
+  }
+
+  .help-btn {
+    top: 8px;
+    right: 8px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+}
