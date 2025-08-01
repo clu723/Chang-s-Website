@@ -11,19 +11,19 @@ app.use(express.static('public'));
 app.use('/api/chatbot', chatbotRoutes);
 
 app.get('/', (req, res) => {
-  res.sendFile(process.cwd() + '/public/chatbot.html');
+  res.sendFile(process.cwd() + '/docs/index.html');
 });
 
 app.get('/chatbot', (req, res) => {
-  res.sendFile(process.cwd() + '/public/chatbot.html');
+  res.sendFile(process.cwd() + '/docs/index.html');
 });
 
 app.get('/about', (req, res) => {
-  res.sendFile(process.cwd() + '/public/about.html');
+  res.sendFile(process.cwd() + '/docs/about.html');
 });
 
 app.get('/projects', (req, res) => {
-  res.sendFile(process.cwd() + '/public/projects.html');
+  res.sendFile(process.cwd() + '/docs/projects.html');
 });
 
 app.listen(port, () => console.log(`Server started on http://localhost:${port}`));

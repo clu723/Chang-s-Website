@@ -4,7 +4,8 @@ const closeBtn = document.getElementById('help-close');
 const helpBackdrop = helpModal.querySelector('.help-backdrop')
 const ROLES = { USER: 'user', BOT: 'bot' };
 const NAV_REGEX = /navigate:([^\s]+)/i;
-const allowedPages = ['chatbot', 'about', 'projects'];
+const allowedPages = ['index.html', 'about.html', 'projects.html'];
+const chatbotURL = "https://chang-s-website-api.onrender.com/api/chatbot";
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
   alert("Speech recognition not supported on your browser!");
@@ -174,7 +175,7 @@ function sendMessage(input, messagesDiv) {
     input.value = '';
     input.focus();
     try {
-        fetch('/api/chatbot', {
+        fetch(chatbotURL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: val })

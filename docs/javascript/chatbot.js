@@ -11,7 +11,8 @@ const ROLES = { USER: 'user', BOT: 'bot' };
 const NAV_REGEX = /navigate:([^\s]+)/i;
 const startingPrompt = `Welcome the user to Chang's website. 
 It's the first time they've visited. Introduce yourself.`;
-const allowedPages = ['chatbot', 'about', 'projects'];
+const allowedPages = ['index.html', 'about.html', 'projects.html'];
+const chatbotURL = "https://chang-s-website-api.onrender.com/api/chatbot";
 
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
@@ -38,7 +39,7 @@ const closeHelpModal = () => {
     helpBtn.style.display = '';
     if (firstRun) {
         sendPromptToGemini(startingPrompt).then(response => {
-            const msg = response.replace(/navigate:[^\s]+/i, '').trim();
+            const msg = response.replace(NAV_REGEX, '').trim();
             createMsg(msg, ROLES.BOT);
             speak(msg);
             navigatePage(response);
@@ -126,7 +127,7 @@ sendButton.addEventListener('click', () => {
 
 async function sendPromptToGemini(prompt) {
   try {
-    const res = await fetch('/api/chatbot', {
+    const res = await fetch(chatbotURL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt }),
