@@ -1,15 +1,38 @@
-let minimized = false;
-let history = JSON.parse(localStorage.getItem('chatbot-history') || '[]');
+const helpModal = document.getElementById('help-modal');
+const helpBtn = document.getElementById('help-btn');
+const closeBtn = document.getElementById('help-close');
+const helpBackdrop = helpModal.querySelector('.help-backdrop')
+const ROLES = { USER: 'user', BOT: 'bot' };
+const NAV_REGEX = /navigate:([^\s]+)/i;
+const allowedPages = ['chatbot', 'about', 'projects'];
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+  alert("Speech recognition not supported on your browser!");
+}
 const recognition = new window.SpeechRecognition;
 recognition.continuous = true;
 recognition.interimResults = true;
 const synth = window.speechSynthesis;
 let micActive = false;
+let minimized = false;
+let history = JSON.parse(localStorage.getItem('chatbot-history') || '[]');
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initPopup();
+    helpBtn.style.display = '';
+    helpBtn.onclick = function () {
+        helpModal.style.display = '';
+        helpBtn.style.display = 'none';
+    };
+
+    const closeHelpModal = () => {
+        helpModal.style.display = 'none';
+        helpBtn.style.display = '';
+    }
+
+    closeBtn.addEventListener('click', closeHelpModal);
+    helpBackdrop.addEventListener('click', closeHelpModal);
 });
 
 function initPopup() {
@@ -66,7 +89,7 @@ function initPopup() {
                 placeholder="Click the microphone to start talking!"
                 autocomplete="off"
                 style="cursor: not-allowed"
-
+                disabled
             
             />
             <div class="action-buttons">
@@ -84,7 +107,6 @@ function initPopup() {
     </div>
   `;
 
-    // Add buttons to popup
     popup.appendChild(minimizeBtn);
 
     // Add popup to body
@@ -98,6 +120,7 @@ function initPopup() {
     const sendBtn = popup.querySelector('#send-btn');
     // Send message handler
     sendBtn.addEventListener('click', () => {
+        micToggle(micButton);
         sendMessage(input, messagesDiv);
     });
 
@@ -137,7 +160,7 @@ function initPopup() {
 const restoreChatHistory = (messagesDiv) => {
     history.forEach(msgObj => {
         const msg = document.createElement('div');
-        msg.className = 'message ' + (msgObj.role === 'user' ? 'user' : 'bot');
+        msg.className = 'message ' + (msgObj.role === ROLES.USER ? ROLES.USER : ROLES.BOT);
         msg.textContent = msgObj.msg;
         messagesDiv.appendChild(msg);
     });
@@ -147,26 +170,33 @@ const restoreChatHistory = (messagesDiv) => {
 function sendMessage(input, messagesDiv) {
     const val = input.value.trim();
     if (!val) return;
-    addMessage('user', val, messagesDiv);
+    addMessage(ROLES.USER, val, messagesDiv);
     input.value = '';
     input.focus();
-    fetch('/api/chatbot', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: val })
-    })
-        .then(r => r.json())
-        .then(data => {
-            const msg = data.replace(/navigate:[^\s]+/i, '').trim();
-            addMessage('bot', msg, messagesDiv);
-            speak(msg);
-            navigatePage(data);
-        });
+    try {
+        fetch('/api/chatbot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: val })
+        })
+            .then(r => r.json())
+            .then(data => {
+                const msg = data.replace(NAV_REGEX, '').trim();
+                addMessage(ROLES.BOT, msg, messagesDiv);
+                console.log(data);
+                speak(msg);
+                navigatePage(data);
+            });
+    } catch (error) {
+        addMessage(ROLES.BOT, "Sorry, something went wrong. Please try again.", messagesDiv);
+        console.error(error);
+        return '';
+    }
 }
 
 function addMessage(role, msg, messagesDiv) {
     const msgDiv = document.createElement('div');
-    msgDiv.className = 'message ' + (role === 'user' ? 'user' : 'bot');
+    msgDiv.className = 'message ' + (role === ROLES.USER ? ROLES.USER : ROLES.BOT);
     msgDiv.textContent = msg;
     messagesDiv.appendChild(msgDiv);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -194,13 +224,13 @@ const speak = (words) => {
     window.speechSynthesis.cancel();
     const spokenWords = new SpeechSynthesisUtterance(words);
     const voices = speechSynthesis.getVoices();
-    const preferredVoice = voices.find(v => v.name.includes("Google US English")) 
-                        || voices[0];
+    const preferredVoice = voices.find(v => v.name.includes("Google US English"))
+        || voices[0];
 
     if (preferredVoice) spokenWords.voice = preferredVoice;
     spokenWords.rate = 1.1;
     synth.speak(spokenWords);
-} 
+}
 
 // Adding 'active' class is for the glow effect when mic is active/inactive
 const micToggle = (micButton) => {
@@ -214,17 +244,15 @@ const micToggle = (micButton) => {
     micButton.classList.toggle('active', micActive);
 }
 
-const allowedPages = ['about.html', 'skills.html', 'projects.html'];
-
 function navigatePage(reply) {
-  const navMatch = reply.match(/navigate:([^\s]+)/i);
+    const navMatch = reply.match(NAV_REGEX);
 
-  if (navMatch) {
-    const targetPage = navMatch[1];
-    if (allowedPages.includes(targetPage)) {
-        setTimeout(() => {
-            window.location.href = targetPage;
-        }, 2000);
+    if (navMatch) {
+        const targetPage = navMatch[1];
+        if (allowedPages.includes(targetPage)) {
+            setTimeout(() => {
+                window.location.href = targetPage;
+            }, 4000);
+        }
     }
-  }
 }

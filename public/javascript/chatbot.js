@@ -3,30 +3,61 @@ const messagesDiv = document.getElementById('messages');
 const chatInput = document.getElementById('chat-input');
 const sendButton = document.getElementById('send-btn');
 const clearButton = document.getElementById('clear-btn');
+const helpModal = document.getElementById('help-modal');
+const helpBtn = document.getElementById('help-btn');
+const closeBtn = document.getElementById('help-close');
+const helpBackdrop = helpModal.querySelector('.help-backdrop')
+const ROLES = { USER: 'user', BOT: 'bot' };
+const NAV_REGEX = /navigate:([^\s]+)/i;
+const startingPrompt = `Welcome the user to Chang's website. 
+It's the first time they've visited. Introduce yourself.`;
+const allowedPages = ['chatbot', 'about', 'projects'];
 
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+  alert("Speech recognition not supported on your browser!");
+}
+
 const recognition = new window.SpeechRecognition;
 recognition.continuous = true;
 recognition.interimResults = true;
 const synth = window.speechSynthesis;
 let micActive = false;
 
-// On user load, Gemini introduces itself
-document.addEventListener('DOMContentLoaded', function() {
-    sendPromptToGemini("Welcome the user to Chang's website.").then(response => {
-        const msg = response.replace(/navigate:[^\s]+/i, '').trim();
-        createMsg(msg, 'bot');
-        speak(msg);
-        navigatePage(response);
-    });
-});
+helpModal.style.display = '';
+helpBtn.style.display = 'none';
+let firstRun = true;
+
+helpBtn.onclick = function () {
+    helpModal.style.display = '';
+    helpBtn.style.display = 'none';
+};
+
+const closeHelpModal = () => {
+    helpModal.style.display = 'none';
+    helpBtn.style.display = '';
+    if (firstRun) {
+        sendPromptToGemini(startingPrompt).then(response => {
+            const msg = response.replace(/navigate:[^\s]+/i, '').trim();
+            createMsg(msg, ROLES.BOT);
+            speak(msg);
+            navigatePage(response);
+        });
+    };
+    firstRun = false;
+}
+
+// Gemini introduces itself
+closeBtn.addEventListener('click', closeHelpModal);
+
+helpBackdrop.addEventListener('click', closeHelpModal);
 
 const history = [];
 
 // role is either 'user' or 'bot' message
 const createMsg = (msg, role) => {
     const msgDiv = document.createElement('div');
-    msgDiv.className = 'message ' + (role === 'user' ? 'user' : 'bot');
+    msgDiv.className = 'message ' + (role === ROLES.USER ? ROLES.USER : ROLES.BOT);
     msgDiv.textContent = msg;
     messagesDiv.appendChild(msgDiv);
     history.push({ role, msg });
@@ -80,13 +111,13 @@ sendButton.addEventListener('click', () => {
     const userMessage = chatInput.value.trim();
     if (userMessage) {
         micToggle();
-        createMsg(userMessage, 'user');
+        createMsg(userMessage, ROLES.USER);
         chatInput.value = '';
 
         // bot response
         sendPromptToGemini(userMessage).then(response => {
-            const msg = response.replace(/navigate:[^\s]+/i, '').trim();
-            createMsg(msg, 'bot');
+            const msg = response.replace(NAV_REGEX, '').trim();
+            createMsg(msg, ROLES.BOT);
             speak(msg);
             navigatePage(response);
         });
@@ -94,26 +125,31 @@ sendButton.addEventListener('click', () => {
 });
 
 async function sendPromptToGemini(prompt) {
-  const res = await fetch('/api/chatbot', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt }),
-  });
-  const data = await res.json();
-  return data;
+  try {
+    const res = await fetch('/api/chatbot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+    });
+    if (!res.ok) throw new Error('Network response was not ok');
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    createMsg("Sorry, something went wrong. Please try again.", ROLES.BOT);
+    console.error(error);
+    return '';
+  }
 };
 
-const allowedPages = ['about.html', 'skills.html', 'projects.html'];
-
 function navigatePage(reply) {
-  const navMatch = reply.match(/navigate:([^\s]+)/i);
+  const navMatch = reply.match(NAV_REGEX);
 
   if (navMatch) {
     const targetPage = navMatch[1];
     if (allowedPages.includes(targetPage)) {
         setTimeout(() => {
             window.location.href = targetPage;
-        }, 2000);
+        }, 4000);
     }
   }
 }
