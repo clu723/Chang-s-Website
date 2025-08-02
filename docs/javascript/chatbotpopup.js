@@ -17,6 +17,7 @@ const synth = window.speechSynthesis;
 let micActive = false;
 let minimized = false;
 let history = JSON.parse(localStorage.getItem('chatbot-history') || '[]');
+let lastAppendedTranscript = "";
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -133,7 +134,11 @@ function initPopup() {
     recognition.onresult = function (event) {
         for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) {
-                input.value += event.results[i][0].transcript;
+                const transcript =  event.results[i][0].transcript;
+                if (transcript && transcript !== lastAppendedTranscript) {
+                    input.value += transcript + " ";
+                    lastAppendedTranscript = transcript;
+                }
             }
         }
     }
@@ -238,6 +243,7 @@ const micToggle = (micButton) => {
     if (micActive) {
         recognition.stop();
     } else {
+        lastAppendedTranscript = "";
         recognition.start();
 
     }

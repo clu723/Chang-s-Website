@@ -24,6 +24,7 @@ recognition.continuous = true;
 recognition.interimResults = true;
 const synth = window.speechSynthesis;
 let micActive = false;
+let lastAppendedTranscript = "";
 
 helpModal.style.display = '';
 helpBtn.style.display = 'none';
@@ -87,6 +88,7 @@ const micToggle = () => {
     if (micActive) {
         recognition.stop();
     } else {
+        lastAppendedTranscript = "";
         recognition.start();
 
     }
@@ -98,7 +100,11 @@ const micToggle = () => {
 recognition.onresult = function (event) {
     for (let i = event.resultIndex; i < event.results.length; i++) {
         if (event.results[i].isFinal) {
-            chatInput.value += event.results[i][0].transcript;
+            const transcript =  event.results[i][0].transcript;
+            if (transcript && transcript !== lastAppendedTranscript) {
+                chatInput.value += transcript + " ";
+                lastAppendedTranscript = transcript;
+            }
         }
     }
 }
