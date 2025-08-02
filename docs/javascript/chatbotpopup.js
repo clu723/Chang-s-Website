@@ -134,11 +134,11 @@ function initPopup() {
     recognition.onresult = function (event) {
         for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) {
-                const transcript =  event.results[i][0].transcript;
-                if (transcript && transcript !== lastAppendedTranscript) {
-                    input.value += transcript + " ";
-                    lastAppendedTranscript = transcript;
+                const transcript =  event.results[i][0].transcript.trim();
+                if (transcript && !chatInput.value.endsWith(transcript + " ")) {
+                    chatInput.value += transcript + " ";
                 }
+            lastAppendedTranscript = chatInput.value;
             }
         }
     }
