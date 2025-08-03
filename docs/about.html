@@ -26,13 +26,16 @@
 
   <main>
     <div class="about center">
-      <h1>Hi, I'm <span class="about__name">Chang!</span></h1>
-      <h2 class="about__role">University of California, Berkeley<br />Computer Science B.A.</h2>
-      <p class="about__desc">Hi, welcome to my humble website.
-        I see that you've already met my lovely assistant. 
-        I'm currently learning how to make this not complete trash.
-      </p>
-      <div class="about__contact center">
+      <div class="about__intro">
+        <h1>Hi, I'm <span class="about__name">Chang!</span></h1>
+        <h2 class="about__role">University of California, Berkeley<br />Computer Science B.A.</h2>
+        <p class="about__desc">Hi, welcome to my humble website.
+          I see that you've already met my lovely assistant.
+          I'm currently learning how to in purely HTML, CSS, and JavaScript.
+          Later, I'll be remaking this in React.
+        </p>
+        
+        <div class="about__contact center">
         <a href="https://drive.google.com/file/d/1_Lg4AHTk73sN06DnKBLWrlKvxsDbeEgd/view?usp=drive_link" target="_blank">
           <span class="btn btn--outline">Resume</span>
         </a>
@@ -41,11 +44,18 @@
           <i aria-hidden="true" class="fab fa-github"></i>
         </a>
 
-        <a href="https://www.linkedin.com/in/clu723/" target="_blank" aria-label="linkedin"
-          class="link link--icon">
+        <a href="https://www.linkedin.com/in/clu723/" target="_blank" aria-label="linkedin" class="link link--icon">
           <i aria-hidden="true" class="fab fa-linkedin"></i>
         </a>
       </div>
+      </div>
+
+      <img
+        src="images/prof.png"
+        alt="Profile picture of Chang"
+        class="about__profile-pic"
+        loading="lazy"
+      />
     </div>
 
     <section class="section skills" id="skills">
