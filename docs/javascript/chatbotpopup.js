@@ -17,8 +17,6 @@ const synth = window.speechSynthesis;
 let micActive = false;
 let minimized = false;
 let history = JSON.parse(localStorage.getItem('chatbot-history') || '[]');
-let lastAppendedTranscript = "";
-
 
 document.addEventListener('DOMContentLoaded', function () {
     initPopup();
@@ -42,46 +40,18 @@ function initPopup() {
 
     // popup container
     const popup = document.createElement('div');
-
     popup.id = 'chatbot-popup';
-    popup.style = `
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 370px;
-        max-width: 96vw;
-        height: 600px;
-        max-height: 90vh;
-        background: #1e1e1e;
-        color: #fff;
-        border-radius: 18px;
-        box-shadow: 0 4px 32px rgba(0,0,0,0.3);
-        z-index: 99999;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-  `;
 
     // Minimize button
     const minimizeBtn = document.createElement('button');
     minimizeBtn.textContent = '×';
     minimizeBtn.title = 'Minimize';
-    minimizeBtn.style = `
-        position: absolute;
-        top: 10px;
-        right: 14px;
-        background: none;
-        color: #fff;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        z-index: 10;
-  `;
+    minimizeBtn.id = "min-button";
 
     // chatbot UI
     popup.innerHTML = `
-    <div class="chat-container" style="height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:1rem 1rem 0 1rem;">
-      <div class="messages" id="chatbot-messages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.5rem;">
+    <div class="chat-container">
+      <div class="messages" id="chatbot-messages">
       </div>
         <div class="input-block">
             <input
@@ -134,14 +104,17 @@ function initPopup() {
     recognition.onresult = function (event) {
         for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) {
-                const transcript =  event.results[i][0].transcript.trim();
-                if (transcript && !chatInput.value.endsWith(transcript + " ")) {
-                    chatInput.value += transcript + " ";
-                }
-            lastAppendedTranscript = chatInput.value;
+                input.value +=  event.results[i][0].transcript
             }
         }
     }
+
+    // Continuous results when mic is active
+    recognition.onend = function() {
+        if (micActive) {
+            recognition.start();
+        }
+    };
 
     // Clear button
     popup.querySelector('#clear-btn').addEventListener('click', () => {
@@ -243,7 +216,6 @@ const micToggle = (micButton) => {
     if (micActive) {
         recognition.stop();
     } else {
-        lastAppendedTranscript = "";
         recognition.start();
 
     }
