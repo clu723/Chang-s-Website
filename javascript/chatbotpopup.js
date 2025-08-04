@@ -11,7 +11,6 @@ if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
   alert("Speech recognition not supported on your browser!");
 }
 const recognition = new window.SpeechRecognition;
-recognition.continuous = true;
 recognition.interimResults = true;
 const synth = window.speechSynthesis;
 let micActive = false;
@@ -104,7 +103,7 @@ function initPopup() {
     recognition.onresult = function (event) {
         for (let i = event.resultIndex; i < event.results.length; i++) {
             if (event.results[i].isFinal) {
-                input.value +=  event.results[i][0].transcript
+                input.value +=  event.results[i][0].transcript + " ";
             }
         }
     }

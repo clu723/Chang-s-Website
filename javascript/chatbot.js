@@ -97,7 +97,7 @@ const micToggle = () => {
 recognition.onresult = function (event) {
     for (let i = event.resultIndex; i < event.results.length; i++) {
         if (event.results[i].isFinal) {
-            chatInput.value +=  event.results[i][0].transcript
+            chatInput.value +=  event.results[i][0].transcript + " ";
         }
     }
 }
